@@ -1,7 +1,3 @@
-
-
-
-
 //counties is the array of data
 //target is the selection of the g element to place the graph in
 //xscale,yscale are the x and y scales.
@@ -116,23 +112,35 @@ var drawLabels = function(graphDim,margins)
 
 var drawLegend = function(graphDim,margins)
 {
+	
+
     
  {
-    var legend = d3.select(target)
+    var legend = d3.select("svg")
         .append("g")
         .classed("legend",true)
         .attr("transform","translate("+
               (margins.left+ 10) +","+
              (margins.top+10)+")");
-    
+   var categories = [
+       {
+           class:"lessCollege",
+           name:"Less College"
+       },
+       {
+           class:"unemployment",
+           name:"High unemployment"
+       }
+    ]
+   
     var entries = legend.selectAll("g")
-        .data(["Percent White","Percentage Voting For Trump"])
+        .data(categories)
         .enter()
         .append("g")
         .classed("legendEntry",true)
-        .attr("fill",function(categories)
+        .attr("class",function(categories,index)
              {
-                return xScale(categories);
+                return categories.class;
              })
         .attr("transform",function(categories,index)
               {
@@ -144,21 +152,11 @@ var drawLegend = function(graphDim,margins)
                 .attr("height",10)
     
         entries.append("text")
-                .text(function(categories){return categories;})
-                .attr("x",15)
+                .text(function(categories){return categories.name;})
+                .attr("x",10)
                 .attr("y",10)
 }
-   var categories = [
-       {
-           class:"lessCollege",
-           name:"Less College"
-       },
-       {
-           class:"unemployment",
-           name:"High unemployment"
-       }
-    ]
-
+   
 
     
     
@@ -173,7 +171,7 @@ var initGraph = function(counties)
     //how much space on each side
     var margins = {left:50,right:20,top:20,bottom:30}
     
-    drawLegend(graphDim,margins);
+    
     
     var graph = 
         {
