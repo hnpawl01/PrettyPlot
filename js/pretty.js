@@ -70,8 +70,17 @@ var makeTranslateString = function(x,y)
 var drawAxes = function(graphDim,margins,
                          xScale,yScale)
 {
-   
- 
+ var xAxis = d3.axisBottom(xScale);
+	 
+	d3.select("svg")
+ 	.append("g")
+	.attr("transform", "translate (" + margins.left + "," +( margins.top + graphDim.height) + ")")
+	.call(xAxis)
+var yAxis = d3.axisLeft(yScale);
+	d3.select("svg")
+ 	.append("g")
+	.attr("transform", "translate (17,30)")
+	.call(yAxis)
 }
 
 
@@ -79,7 +88,30 @@ var drawAxes = function(graphDim,margins,
 //margins - objedct that stores the size of the margins
 var drawLabels = function(graphDim,margins)
 {
-    
+	   var labels = d3.select("svg")
+        .append("g")
+        .classed("labels",true)
+	   
+	   labels.append("text")
+		.classed("title", true)
+		.text("Trump Support")
+        .attr("text-anchor","middle")
+		.attr("x", margins.left + graphDim.width/2)
+		.attr("y", margins.top + (10))
+	
+	labels.append("text")
+		.classed("lable", true)
+		.text("Percent White")
+        .attr("text-anchor","middle")
+		.attr("x", margins.left + graphDim.width/2)
+		.attr("y", margins.top + (620))
+	
+	labels.append("text")
+		.classed("label", true)
+		.text("Percentage Voting For Trump")
+        .attr("text-anchor","middle")
+		.attr("x", "transform","rotate(90)")
+		.attr("y", "transform" , "translate (0,"+ graphDim.height/2)
 }
 
 
@@ -108,7 +140,7 @@ var drawLegend = function(graphDim,margins)
 var initGraph = function(counties)
 {
     //size of screen
-    var screen = {width:800,height:600}
+    var screen = {width:800,height:700}
     //how much space on each side
     var margins = {left:30,right:20,top:20,bottom:30}
     
