@@ -79,7 +79,7 @@ var drawAxes = function(graphDim,margins,
 var yAxis = d3.axisLeft(yScale);
 	d3.select("svg")
  	.append("g")
-	.attr("transform", "translate (17,30)")
+	.attr("transform", "translate (" + margins.left + "," +( margins.bottom) + ")")
 	.call(yAxis)
 }
 
@@ -100,25 +100,54 @@ var drawLabels = function(graphDim,margins)
 		.attr("y", margins.top + (10))
 	
 	labels.append("text")
-		.classed("lable", true)
+		.classed("label", true)
 		.text("Percent White")
         .attr("text-anchor","middle")
 		.attr("x", margins.left + graphDim.width/2)
-		.attr("y", margins.top + (620))
+		.attr("y", margins.top + (graphDim.height) +(30))
 	
 	labels.append("text")
 		.classed("label", true)
 		.text("Percentage Voting For Trump")
         .attr("text-anchor","middle")
-		.attr("x", "transform","rotate(90)")
-		.attr("y", "transform" , "translate (0,"+ graphDim.height/2)
+		.attr( "transform" , "rotate(90) translate (" +(graphDim.height/2)  + ",-5)")
 }
 
 
 var drawLegend = function(graphDim,margins)
 {
     
- 
+ {
+    var legend = d3.select(target)
+        .append("g")
+        .classed("legend",true)
+        .attr("transform","translate("+
+              (margins.left+ 10) +","+
+             (margins.top+10)+")");
+    
+    var entries = legend.selectAll("g")
+        .data(["Percent White","Percentage Voting For Trump"])
+        .enter()
+        .append("g")
+        .classed("legendEntry",true)
+        .attr("fill",function(categories)
+             {
+                return xScale(categories);
+             })
+        .attr("transform",function(categories,index)
+              {
+                return "translate(0,"+index*20+")";
+              })
+              
+        entries.append("rect")
+                .attr("width",10)
+                .attr("height",10)
+    
+        entries.append("text")
+                .text(function(categories){return categories;})
+                .attr("x",15)
+                .attr("y",10)
+}
    var categories = [
        {
            class:"lessCollege",
@@ -140,11 +169,11 @@ var drawLegend = function(graphDim,margins)
 var initGraph = function(counties)
 {
     //size of screen
-    var screen = {width:800,height:700}
+    var screen = {width:800,height:600}
     //how much space on each side
-    var margins = {left:30,right:20,top:20,bottom:30}
+    var margins = {left:50,right:20,top:20,bottom:30}
     
-    
+    drawLegend(graphDim,margins);
     
     var graph = 
         {
@@ -191,6 +220,7 @@ var successFCN = function(counties)
 {
     console.log("politics",counties);
     initGraph(counties);
+	
 }
 
 var failFCN = function(error)
